@@ -2356,11 +2356,6 @@ arrify@^1.0.1:
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=
 
-arrows-svg@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/arrows-svg/-/arrows-svg-1.4.1.tgz#ab36c6f308b0b9d7062a99344b93c4843db2b317"
-  integrity sha512-olg/86P5UkQ/bss7XrZWc8k6VQXibpFtTahm+4LWdg20/Rg9IiAbk4YY3S8OJX4fDm+3Q4FvwGOE1VLny3/cCA==
-
 asap@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
@@ -7735,6 +7730,11 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
+pagerank.js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pagerank.js/-/pagerank.js-1.0.2.tgz#8f0d8b2b68eb6fadde0aad780df045d226f77584"
+  integrity sha1-jw2LK2jrb63eCq14DfBF0ib3dYQ=
+
 pako@~1.0.5:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
@@ -9291,13 +9291,6 @@ react-app-polyfill@^1.0.6:
     raf "^3.4.1"
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
-
-react-arrows@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-arrows/-/react-arrows-1.2.0.tgz#e2139ed1d1fd7d6f17827e1d61f81b29a02c0642"
-  integrity sha512-jiuOAWAZ+Qka0fvM4MCC5w/nKnyPooBgEMzGTI8cBA0shD7t7NlSkNCStLENFOuYtcR1ERUmIK6KiMvcoRnI9Q==
-  dependencies:
-    arrows-svg "^1.4.1"
 
 react-dev-utils@^10.2.1:
   version "10.2.1"

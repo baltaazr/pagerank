@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Node, colors } from './components';
 import { notification, Menu } from 'antd';
+import graph from 'pagerank.js';
 
 const RADIUS = 50;
 
 type Node = {
   position: { x: number; y: number };
   id: number;
-  rank?: number;
 };
 
 type Link = {
@@ -28,6 +28,20 @@ const App = () => {
   const [menuCoords, setMenuCoords] = useState<
     { x: number; y: number } | undefined
   >(undefined);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', (e: Event) => {
+      if (e.target === document.body) {
+        setSelected(undefined);
+        setMenuCoords(undefined);
+      }
+    });
+    document.addEventListener('contextmenu', (e: MouseEvent) => {
+      e.preventDefault();
+      if (e.target === document.body)
+        setMenuCoords({ x: e.clientX, y: e.clientY });
+    });
+  }, []);
 
   const addNode = () => {
     setNodes((prevNodes) => [
@@ -77,9 +91,20 @@ const App = () => {
     } else setSelected(id);
   };
 
-  const nodesComponent = nodes.map(({ position, rank, id }, idx) => (
+  graph.reset();
+
+  links.forEach(({ from, to }) => {
+    graph.link(from, to);
+  });
+
+  const ranks: string[] = [];
+  graph.rank(0.81, 0.000001, (node: number, rank: number) => {
+    ranks[node] = rank.toFixed(3);
+  });
+
+  const nodesComponent = nodes.map(({ position, id }, idx) => (
     <Node
-      value={rank || 0}
+      value={ranks[idx] || '0.000'}
       id={id}
       colorIdx={idx % colors.length}
       position={position}
@@ -95,24 +120,11 @@ const App = () => {
         handleRightClick(e, id);
       }}
       selected={selected === id}
+      key={idx}
     />
   ));
 
-  useEffect(() => {
-    document.addEventListener('mousedown', (e: Event) => {
-      if (e.target === document.body) {
-        setSelected(undefined);
-        setMenuCoords(undefined);
-      }
-    });
-    document.addEventListener('contextmenu', (e: MouseEvent) => {
-      e.preventDefault();
-      if (e.target === document.body)
-        setMenuCoords({ x: e.clientX, y: e.clientY });
-    });
-  }, []);
-
-  const linksComponent = links.map(({ from, to }) => {
+  const linksComponent = links.map(({ from, to }, idx) => {
     const startNode = nodes.find(({ id }) => id === from);
     const endNode = nodes.find(({ id }) => id === to);
 
@@ -130,6 +142,7 @@ const App = () => {
         xmlns='http://www.w3.org/2000/svg'
         viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}
         style={{ position: 'absolute', top: 0, zIndex: -1 }}
+        key={idx}
       >
         <defs>
           <marker

@@ -7,7 +7,7 @@ const { Text, Title } = Typography;
 
 type NodeProps = {
   id: number;
-  value: number;
+  value: string;
   colorIdx: number;
   position: { x: number; y: number };
   radius: number;
