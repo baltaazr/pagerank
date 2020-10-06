@@ -150,8 +150,8 @@ const App = () => {
   graph.reset();
 
   const visited = new Set();
-  links.forEach(({ from, to }) => {
-    graph.link(from, to);
+  links.forEach(({ from, to, weight }) => {
+    for (let i = 0; i < weight; i++) graph.link(from, to);
 
     visited.add(from);
     visited.add(to);
