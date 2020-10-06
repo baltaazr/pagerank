@@ -15,13 +15,32 @@ type Link = {
   to: number;
 };
 
-const App = () => {
-  const [nodes, setNodes] = useState<Node[]>([
-    { position: { x: 100, y: 100 }, id: 0 },
-    { position: { x: 50, y: 200 }, id: 1 }
-  ]);
+const defaultNodes: Node[] = [
+  { position: { x: 50, y: 50 }, id: 0 },
+  { position: { x: 300, y: 300 }, id: 1 },
+  { position: { x: 360, y: 80 }, id: 2 },
+  { position: { x: 70, y: 350 }, id: 3 },
+  { position: { x: 600, y: 300 }, id: 4 },
+  { position: { x: 370, y: 600 }, id: 5 }
+];
 
-  const [links, setLinks] = useState<Link[]>([{ from: 0, to: 1 }]);
+const defaultLinks: Link[] = [
+  { from: 0, to: 1 },
+  { from: 1, to: 2 },
+  { from: 1, to: 3 },
+  { from: 1, to: 4 },
+  { from: 1, to: 5 },
+  { from: 2, to: 0 },
+  { from: 2, to: 4 },
+  { from: 3, to: 0 },
+  { from: 3, to: 5 },
+  { from: 5, to: 2 }
+];
+
+const App = () => {
+  const [nodes, setNodes] = useState<Node[]>(defaultNodes);
+
+  const [links, setLinks] = useState<Link[]>(defaultLinks);
 
   const [selected, setSelected] = useState<number | undefined>(undefined);
 
