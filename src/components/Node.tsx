@@ -12,6 +12,9 @@ type NodeProps = {
   position: { x: number; y: number };
   radius: number;
   onDrag: DraggableEventHandler;
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  selected: boolean;
 };
 
 export const colors = [
@@ -25,12 +28,17 @@ export const colors = [
   '#944EE9'
 ];
 
-const StyledNode = styled.div<{ colorIdx: number; radius: number }>`
+const StyledNode = styled.div<{
+  colorIdx: number;
+  radius: number;
+  selected: boolean;
+}>`
   position: absolute;
   display: flex;
   flex-direction: column;
   height: ${({ radius }) => radius * 2}px;
   width: ${({ radius }) => radius * 2}px;
+  border: ${({ selected }) => (selected ? '5px solid #FFD700' : null)};
   border-radius: 50%;
   background-color: ${({ colorIdx }) => colors[colorIdx]};
   justify-content: center;
@@ -43,16 +51,26 @@ export const Node = ({
   colorIdx,
   position,
   radius,
-  onDrag
+  onDrag,
+  onClick,
+  onContextMenu,
+  selected
 }: NodeProps) => {
   return (
     <Draggable position={position} onDrag={onDrag}>
-      <StyledNode colorIdx={colorIdx} id={id.toString()} radius={radius}>
+      <StyledNode
+        colorIdx={colorIdx}
+        id={id.toString()}
+        radius={radius}
+        onClick={onClick}
+        onContextMenu={onContextMenu}
+        selected={selected}
+      >
         <div>
-          <Text>{id}</Text>
+          <Text>{value}</Text>
         </div>
         <div>
-          <Title>{value}</Title>
+          <Title>{id}</Title>
         </div>
       </StyledNode>
     </Draggable>

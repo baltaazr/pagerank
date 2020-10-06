@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Node, colors } from './components';
+import { notification } from 'antd';
 
 const RADIUS = 50;
 
@@ -22,6 +23,25 @@ const App = () => {
 
   const [links, setLinks] = useState<Link[]>([{ from: 0, to: 1 }]);
 
+  const [selected, setSelected] = useState<number | undefined>(undefined);
+
+  const handleRightClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    id: number
+  ) => {
+    e.preventDefault();
+    if (selected !== undefined) {
+      if (
+        selected !== id &&
+        !links.find(({ from, to }) => from === selected && to === id)
+      ) {
+        setLinks((prevLinks) => [...prevLinks, { from: selected, to: id }]);
+        notification.success({ message: 'Linked successfully' });
+      }
+      setSelected(undefined);
+    } else setSelected(id);
+  };
+
   const nodesComponent = nodes.map(({ position, rank, id }, idx) => (
     <Node
       value={rank || 0}
@@ -36,8 +56,18 @@ const App = () => {
         newNodes[idx] = { ...newNodes[idx], position: { x, y } };
         setNodes(newNodes);
       }}
+      onContextMenu={(e) => {
+        handleRightClick(e, id);
+      }}
+      selected={selected === id}
     />
   ));
+
+  useEffect(() => {
+    document.addEventListener('mousedown', (e: Event) => {
+      if (e.target === document.body) setSelected(undefined);
+    });
+  }, []);
 
   const linksComponent = links.map(({ from, to }) => {
     const startNode = nodes.find(({ id }) => id === from);
