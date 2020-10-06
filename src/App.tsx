@@ -157,7 +157,7 @@ const App = () => {
     visited.add(to);
   });
 
-  const leftover = nodes.filter((n) => !visited.has(n));
+  const leftover = nodes.filter(({ id }) => !visited.has(id));
   leftover.forEach(({ id }) => graph.link(id, id));
 
   const ranks: string[] = [];
