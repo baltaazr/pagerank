@@ -57,12 +57,21 @@ const App = () => {
   ) => {
     e.preventDefault();
     if (selected !== undefined) {
-      if (
-        selected !== id &&
-        !links.find(({ from, to }) => from === selected && to === id)
-      ) {
-        setLinks((prevLinks) => [...prevLinks, { from: selected, to: id }]);
-        notification.success({ message: 'Linked successfully' });
+      if (selected !== id) {
+        const idx = links.findIndex(
+          ({ from, to }) => from === selected && to === id
+        );
+        if (idx === -1) {
+          setLinks((prevLinks) => [...prevLinks, { from: selected, to: id }]);
+          notification.success({ message: 'Linked successfully' });
+        } else {
+          setLinks((prevLinks) => {
+            const newLinks = [...prevLinks];
+            newLinks.splice(idx, 1);
+            return newLinks;
+          });
+          notification.success({ message: 'Linked removed successfully' });
+        }
       }
       setSelected(undefined);
     } else setSelected(id);
@@ -98,7 +107,6 @@ const App = () => {
     });
     document.addEventListener('contextmenu', (e: MouseEvent) => {
       e.preventDefault();
-      console.log(e.target);
       if (e.target === document.body)
         setMenuCoords({ x: e.clientX, y: e.clientY });
     });
