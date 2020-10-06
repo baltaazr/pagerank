@@ -15,6 +15,7 @@ type NodeProps = {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   selected: boolean;
+  onDoubleClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 };
 
 export const colors = [
@@ -54,7 +55,8 @@ export const Node = ({
   onDrag,
   onClick,
   onContextMenu,
-  selected
+  selected,
+  onDoubleClick
 }: NodeProps) => {
   return (
     <Draggable position={position} onDrag={onDrag}>
@@ -64,6 +66,7 @@ export const Node = ({
         radius={radius}
         onClick={onClick}
         onContextMenu={onContextMenu}
+        onDoubleClick={onDoubleClick}
         selected={selected}
       >
         <div>
