@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Node, colors } from './components';
-import { notification } from 'antd';
+import { notification, Menu } from 'antd';
 
 const RADIUS = 50;
 
@@ -24,6 +24,32 @@ const App = () => {
   const [links, setLinks] = useState<Link[]>([{ from: 0, to: 1 }]);
 
   const [selected, setSelected] = useState<number | undefined>(undefined);
+
+  const [menuCoords, setMenuCoords] = useState<
+    { x: number; y: number } | undefined
+  >(undefined);
+
+  const addNode = () => {
+    setNodes((prevNodes) => [
+      ...prevNodes,
+      { position: { x: menuCoords!.x, y: menuCoords!.y }, id: prevNodes.length }
+    ]);
+    setMenuCoords(undefined);
+  };
+
+  const contextMenu = (
+    <Menu
+      onClick={addNode}
+      style={{
+        position: 'absolute',
+        top: (menuCoords && menuCoords.y) || 0,
+        left: (menuCoords && menuCoords.x) || 0,
+        boxShadow: '0 10px 15px 0 rgba(0,0,0,0.2)'
+      }}
+    >
+      <Menu.Item>Add Node</Menu.Item>
+    </Menu>
+  );
 
   const handleRightClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -65,7 +91,16 @@ const App = () => {
 
   useEffect(() => {
     document.addEventListener('mousedown', (e: Event) => {
-      if (e.target === document.body) setSelected(undefined);
+      if (e.target === document.body) {
+        setSelected(undefined);
+        setMenuCoords(undefined);
+      }
+    });
+    document.addEventListener('contextmenu', (e: MouseEvent) => {
+      e.preventDefault();
+      console.log(e.target);
+      if (e.target === document.body)
+        setMenuCoords({ x: e.clientX, y: e.clientY });
     });
   }, []);
 
@@ -114,9 +149,10 @@ const App = () => {
   });
 
   return (
-    <div className='App'>
+    <div>
       {nodesComponent}
       {linksComponent}
+      {menuCoords ? contextMenu : null}
     </div>
   );
 };
