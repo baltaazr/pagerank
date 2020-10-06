@@ -167,7 +167,7 @@ const App = () => {
 
   const nodesComponent = nodes.map(({ position, id }, idx) => (
     <Node
-      value={ranks[idx] || '0.000'}
+      value={ranks[id] || '0.000'}
       id={id}
       colorIdx={id % colors.length}
       position={position}
