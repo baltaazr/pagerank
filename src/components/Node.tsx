@@ -44,6 +44,7 @@ const StyledNode = styled.div<{
   background-color: ${({ colorIdx }) => colors[colorIdx]};
   justify-content: center;
   align-items: center;
+  cursor: default;
 `;
 
 export const Node = ({
