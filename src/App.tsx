@@ -5,6 +5,11 @@ import graph from 'pagerank.js';
 
 const RADIUS = 50;
 
+const xMin = 0
+const yMin = 0
+const xMax = window.innerWidth - RADIUS * 3
+const yMax = window.innerHeight - RADIUS * 3
+
 type Node = {
   position: { x: number; y: number };
   id: number;
@@ -17,12 +22,12 @@ type Link = {
 };
 
 const defaultNodes: Node[] = [
-  { position: { x: 50, y: 50 }, id: 0 },
-  { position: { x: 300, y: 300 }, id: 1 },
-  { position: { x: 360, y: 80 }, id: 2 },
-  { position: { x: 70, y: 350 }, id: 3 },
-  { position: { x: 600, y: 300 }, id: 4 },
-  { position: { x: 370, y: 600 }, id: 5 }
+  { position: { x: Math.min(50, xMax), y: Math.min(50, yMax) }, id: 0 },
+  { position: { x: Math.min(300, xMax), y: Math.min(250, yMax) }, id: 1 },
+  { position: { x: Math.min(360, xMax), y: Math.min(80, yMax) }, id: 2 },
+  { position: { x: Math.min(70, xMax), y: Math.min(300, yMax) }, id: 3 },
+  { position: { x: Math.min(600, xMax), y: Math.min(250, yMax) }, id: 4 },
+  { position: { x: Math.min(370, xMax), y: Math.min(500, yMax) }, id: 5 }
 ];
 
 const defaultLinks: Link[] = [
@@ -165,30 +170,35 @@ const App = () => {
     ranks[node] = rank.toFixed(3);
   });
 
-  const nodesComponent = nodes.map(({ position, id }, idx) => (
-    <Node
-      value={ranks[id] || '0.000'}
-      id={id}
-      colorIdx={id % colors.length}
-      position={position}
-      radius={RADIUS}
-      onDrag={(e, data) => {
-        const { x, y } = data;
-        const newNodes = [...nodes];
-        const idx = newNodes.findIndex(({ id: nodeId }) => nodeId === id);
-        newNodes[idx] = { ...newNodes[idx], position: { x, y } };
-        setNodes(newNodes);
-      }}
-      onContextMenu={(e) => {
-        handleRightClick(e, id);
-      }}
-      selected={selected === id}
-      onDoubleClick={() => {
-        removeNode(id);
-      }}
-      key={id}
-    />
-  ));
+  const nodesComponent = nodes.map(({ position, id }, idx) =>
+    (
+      <Node
+        value={ranks[id] || '0.000'}
+        id={id}
+        colorIdx={id % colors.length}
+        position={position}
+        radius={RADIUS}
+        onDrag={(e, data) => {
+          let { x, y } = data;
+          x = Math.min(x, xMax)
+          x = Math.max(x, xMin)
+          y = Math.min(y, yMax)
+          y = Math.max(y, yMin)
+          const newNodes = [...nodes];
+          const idx = newNodes.findIndex(({ id: nodeId }) => nodeId === id);
+          newNodes[idx] = { ...newNodes[idx], position: { x, y } };
+          setNodes(newNodes);
+        }}
+        onContextMenu={(e) => {
+          handleRightClick(e, id);
+        }}
+        selected={selected === id}
+        onDoubleClick={() => {
+          removeNode(id);
+        }}
+        key={id}
+      />
+    ));
 
   const linksComponent = links.map(({ from, to, weight }, idx) => {
     const startNode = nodes.find(({ id }) => id === from);

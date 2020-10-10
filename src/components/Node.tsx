@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
 import { Typography } from 'antd';
@@ -33,6 +33,7 @@ const StyledNode = styled.div<{
   colorIdx: number;
   radius: number;
   selected: boolean;
+  drag: boolean
 }>`
   position: absolute;
   display: flex;
@@ -44,7 +45,7 @@ const StyledNode = styled.div<{
   background-color: ${({ colorIdx }) => colors[colorIdx]};
   justify-content: center;
   align-items: center;
-  cursor: default;
+  cursor: ${({ drag }) => drag ? `url('https://www.google.com/intl/en_ALL/mapfiles/closedhand.cur'), all-scroll` : `url('https://www.google.com/intl/en_ALL/mapfiles/openhand.cur'), all-scroll`};
 `;
 
 export const Node = ({
@@ -59,8 +60,10 @@ export const Node = ({
   selected,
   onDoubleClick
 }: NodeProps) => {
+  const [drag, setDrag] = useState<boolean>(false)
+
   return (
-    <Draggable position={position} onDrag={onDrag}>
+    <Draggable position={position} onDrag={onDrag} onStart={()=>{setDrag(true)}} onStop={()=>{setDrag(false)}}>
       <StyledNode
         colorIdx={colorIdx}
         id={id.toString()}
@@ -69,6 +72,7 @@ export const Node = ({
         onContextMenu={onContextMenu}
         onDoubleClick={onDoubleClick}
         selected={selected}
+        drag={drag}
       >
         <div>
           <Text>{value}</Text>
