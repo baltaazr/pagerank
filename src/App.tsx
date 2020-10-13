@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Node, colors } from './components';
-import { notification, Menu } from 'antd';
+import { notification, Menu, Modal } from 'antd';
 import graph from 'pagerank.js';
 
 const RADIUS = 50;
@@ -47,6 +47,8 @@ const App = () => {
   const [menuCoords, setMenuCoords] = useState<
     { x: number; y: number } | undefined
   >(undefined);
+
+  const [modal, setModal] = useState<boolean>(true);
 
   useEffect(() => {
     document.addEventListener('mousedown', (e: Event) => {
@@ -189,11 +191,34 @@ const App = () => {
   });
 
   return (
-    <div>
-      {nodesComponent}
-      {linksComponent}
-      {menuCoords ? contextMenu : null}
-    </div>
+    <>
+      <div>
+        {nodesComponent}
+        {linksComponent}
+        {menuCoords ? contextMenu : null}
+      </div>
+      <Modal
+        title='Instructions'
+        visible={modal}
+        onOk={() => {
+          setModal(false);
+        }}
+        onCancel={() => {
+          setModal(false);
+        }}
+      >
+        <p>
+          Right click node to node to link/unlink them depending on linking
+          state
+        </p>
+        <p>
+          Change linking state from linking to unlinking and vice versa by
+          clicking the button on the top left
+        </p>
+        <p>Double click a node to delete it</p>
+        <p>Right click blank space and select "Add Node" to add a node</p>
+      </Modal>
+    </>
   );
 };
 
